@@ -1,3 +1,9 @@
+//1. List the countries
+const loadEvent = function () {
+    const options = document.querySelector("#all")
+    countries.forEach((country, i) => {
+        options.insertAdjacentHTML("beforeend", `<option id = ${i}> ${country.name.common} </option>`)
+    });
+}
 
-
-console.log(countries[0].name.common)
+window.addEventListener("load", loadEvent)
