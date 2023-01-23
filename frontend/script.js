@@ -8,6 +8,7 @@ const loadEvent = function () {
 
     //2. Details of the selected country
     const main = document.querySelector("#country");
+    main.innerHTML = `Select a country from the list`
     options.addEventListener("change", function () {
         const selectedValue = this.value;
         const selectedCountry = countries.find(country => country.name.common === selectedValue);
@@ -23,7 +24,7 @@ const loadEvent = function () {
     });
 
     //3. Neighbour with the largest population
-    
+
 
 };
 
