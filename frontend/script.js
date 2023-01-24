@@ -18,13 +18,15 @@ const loadEvent = function () {
     //Ex. 5
     const nav = document.querySelector("#toolbar")
     nav.insertAdjacentHTML("beforeend",
-        `<button id="prev" disabled>Previous country</button>
-        <button id="next" disabled>Next country</button>
+        `<button id="prev">Previous country</button>
+        <button id="next">Next country</button>
         `)
     const prevBtn = document.querySelector("#prev");
+    prevBtn.style.display = "none"
     const nextBtn = document.querySelector("#next");
+    nextBtn.style.display = "none"
     let visitedCountries = [];
-    let currentIndex = visitedCountries.length;
+    let currentIndex = visitedCountries.length -1;
     //**************************** */
     options.addEventListener("change", function () {
         const selectedValue = this.value;
@@ -32,27 +34,32 @@ const loadEvent = function () {
 
         //**************************************** */
         //Ex. 5
-        // prevBtn.getElementsByClassName.display = "block"
-        nextBtn.getElementsByClassName.display = "block"
-        visitedCountries.push(selectedCountry.name.common)
+        visitedCountries.push(selectedCountry)
         console.log(visitedCountries)
-        console.log(++currentIndex)
-        if(currentIndex === 0){
-            prevBtn.removeAttribute('disabled')
-            prevBtn.setAttribute('enable')
-            // prevBtn.addEventListener('click', function(){
-            //     console.log("aasvf")
-                // main.innerHTML = `
-                //     <img src="${visitedCountries[currentIndex-1].flags.png}">
-                //     <h1>${visitedCountries[currentIndex-1].name.common}</h1>
-                //     <h2>${visitedCountries[currentIndex-1].region}</h2>
-                //     <h3>${visitedCountries[currentIndex-1].subregion}</h3>
-                //     <h4>${visitedCountries[currentIndex-1].capital}</h4>
-                // `;
-            // })
+        ++currentIndex
+        if(currentIndex >= 1){
+            prevBtn.style.display = "block"
+            prevBtn.addEventListener('click', function(){
+                main.innerHTML = `
+                <img src="${visitedCountries[currentIndex-1].flags.png}">
+                <h1>${visitedCountries[currentIndex-1].name.common}</h1>
+                <h2>${visitedCountries[currentIndex-1].region}</h2>
+                <h3>${visitedCountries[currentIndex-1].subregion}</h3>
+                <h4>${visitedCountries[currentIndex-1].capital}</h4>
+            `;
+                nextBtn.style.display = "block"
+                nextBtn.addEventListener('click', function(){
+                    main.innerHTML = `
+                    <img src="${visitedCountries[currentIndex].flags.png}">
+                    <h1>${visitedCountries[currentIndex].name.common}</h1>
+                    <h2>${visitedCountries[currentIndex].region}</h2>
+                    <h3>${visitedCountries[currentIndex].subregion}</h3>
+                    <h4>${visitedCountries[currentIndex].capital}</h4>
+                `;
+                })
+            })
         }
-       
-      
+        
         //**************************** */
 
 
