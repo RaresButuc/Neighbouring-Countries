@@ -1,9 +1,11 @@
+
 const loadEvent = function () {
     //1. List the countries
     const options = document.querySelector("#all");
     const population = document.querySelector('#population')
     const area = document.querySelector('#area')
-    // options.insertAdjacentHTML("beforeend", `<p>Select the country</p>`);
+    options.insertAdjacentHTML("beforeend", `<option value="" selected="true" disabled>Select a country</option>`);
+
     countries.forEach((country, i) => {
         options.insertAdjacentHTML("beforeend", `<option id = ${i}> ${country.name.common} </option>`);
     });
@@ -11,9 +13,11 @@ const loadEvent = function () {
     //2. Details of the selected country
     const main = document.querySelector("#country");
     main.innerHTML = `Select a country from the list`
+    let selectedCountry;
     options.addEventListener("change", function () {
         const selectedValue = this.value;
         const selectedCountry = countries.find(country => country.name.common === selectedValue);
+
         if (selectedCountry) {
             main.innerHTML = `
                 <img src="${selectedCountry.flags.png}">
@@ -22,38 +26,40 @@ const loadEvent = function () {
                 <h3>${selectedCountry.subregion}</h3>
                 <h4>${selectedCountry.capital}</h4>
             `;
+
         }
 
-        //3. Neighbour with the largest population
-        population.addEventListener('click', function () {
-            countries.forEach((element, i) => {
-                let bigNeighbour = countries[countries.indexOf(element) -1]
-                        let smallNeighbour = countries[countries.indexOf(element) +1]
-                if (selectedCountry === element) {
-                    if (countries[countries.indexOf(element) - 1].population > countries[countries.indexOf(element) + 1].population) {
-                        main.innerHTML = `
-                        <img src="${bigNeighbour.flags.png}">
-                        <h1>${bigNeighbour.name.common}</h1>
-                        <h2>${bigNeighbour.region}</h2>
-                        <h3>${bigNeighbour.subregion}</h3>
-                        <h4>${bigNeighbour.capital}</h4>
-                        <h5>${bigNeighbour.population}</h5>
-                     `;
-                    } else {
-                        main.innerHTML = `
-                        <img src="${smallNeighbour.flags.png}">
-                        <h1>${smallNeighbour.name.common}</h1>
-                        <h2>${smallNeighbour.region}</h2>
-                        <h3>${smallNeighbour.subregion}</h3>
-                        <h4>${smallNeighbour.capital}</h4>
-                        <h5>${smallNeighbour.population}</h5>
-                     `;
-                    }
+        //3.Largest population
+
+        const populationBtn = document.querySelector("#population");
+
+        populationBtn.addEventListener("click", function () {
+
+            let largestPopulationNeighbor;
+            let largestPopulation = 0;
+
+            selectedCountry.borders.forEach(borderCountry => {
+                const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
+
+                if (currentNeighbor.population > largestPopulation) {
+                    largestPopulation = currentNeighbor.population;
+                    largestPopulationNeighbor = currentNeighbor;
+                    main.innerHTML = `
+        <img src="${selectedCountry.flags.png}"> </img>
+        <h1>${largestPopulationNeighbor.name.common}</h1>
+        <h2>${largestPopulationNeighbor.region}</h2>
+        <h3>${largestPopulationNeighbor.subregion}</h3>
+        <h4>${largestPopulationNeighbor.capital}</h4>
+        <p> Population: ${largestPopulationNeighbor.population}</p>`
                 }
             })
         })
-    });
 
-};
+    })
+
+
+}
 
 window.addEventListener("load", loadEvent);
+
+
