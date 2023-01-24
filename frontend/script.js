@@ -1,4 +1,15 @@
 const loadEvent = function () {
+    const mainFunct = (element) => {
+        main.innerHTML = `
+        <img src="${element.flags.png}">
+        <h1>Country name: ${element.name.common}</h1>
+        <h2>Region: ${element.region}</h2>
+        <h3>Subregion: ${element.subregion}</h3>
+        <h4>Capital: ${element.capital}</h4>
+        <h4>Population: ${element.population}</h4>
+        <h4>Area: ${element.area}</h4>
+    `;
+    }
     //1. List the countries
     const options = document.querySelector("#all");
     const population = document.querySelector('#population')
@@ -40,22 +51,10 @@ const loadEvent = function () {
         if(currentIndex >= 1){
             prevBtn.style.display = "block"
             prevBtn.addEventListener('click', function(){
-                main.innerHTML = `
-                <img src="${visitedCountries[currentIndex-1].flags.png}">
-                <h1>${visitedCountries[currentIndex-1].name.common}</h1>
-                <h2>${visitedCountries[currentIndex-1].region}</h2>
-                <h3>${visitedCountries[currentIndex-1].subregion}</h3>
-                <h4>${visitedCountries[currentIndex-1].capital}</h4>
-            `;
+                mainFunct(visitedCountries[currentIndex-1])
                 nextBtn.style.display = "block"
                 nextBtn.addEventListener('click', function(){
-                    main.innerHTML = `
-                    <img src="${visitedCountries[currentIndex].flags.png}">
-                    <h1>${visitedCountries[currentIndex].name.common}</h1>
-                    <h2>${visitedCountries[currentIndex].region}</h2>
-                    <h3>${visitedCountries[currentIndex].subregion}</h3>
-                    <h4>${visitedCountries[currentIndex].capital}</h4>
-                `;
+                    mainFunct(visitedCountries[currentIndex])
                 })
             })
         }
@@ -64,14 +63,7 @@ const loadEvent = function () {
 
 
         if (selectedCountry) {
-            main.innerHTML = `
-                <img src="${selectedCountry.flags.png}">
-                <h1>${selectedCountry.name.common}</h1>
-                <h2>${selectedCountry.region}</h2>
-                <h3>${selectedCountry.subregion}</h3>
-                <h4>${selectedCountry.capital}</h4>
-            `;
-
+            mainFunct(selectedCountry)
         }
         //3.Largest population
 
@@ -89,13 +81,7 @@ const loadEvent = function () {
                 if (currentNeighbor.population > largestPopulation) {
                     largestPopulation = currentNeighbor.population;
                     largestPopulationNeighbor = currentNeighbor;
-                    main.innerHTML = `
-        <img src="${largestPopulationNeighbor.flags.png}"> </img>
-        <h1>${largestPopulationNeighbor.name.common}</h1>
-        <h2>${largestPopulationNeighbor.region}</h2>
-        <h3>${largestPopulationNeighbor.subregion}</h3>
-        <h4>${largestPopulationNeighbor.capital}</h4>
-        <p> Population: ${largestPopulationNeighbor.population}</p>`
+                    mainFunct(largestPopulationNeighbor)
                 }
             })
         })
@@ -116,20 +102,12 @@ const loadEvent = function () {
                 if (currentNeighbor.area > largestArea) {
                     largestArea = currentNeighbor.area;
                     largestAreaNeighbor = currentNeighbor;
-                    main.innerHTML = `
-        <img src="${largestAreaNeighbor.flags.png}"> </img>
-        <h1>${largestAreaNeighbor.name.common}</h1>
-        <h2>${largestAreaNeighbor.region}</h2>
-        <h3>${largestAreaNeighbor.subregion}</h3>
-        <h4>${largestAreaNeighbor.capital}</h4>
-        <p> Area: ${largestAreaNeighbor.area}</p>`
+                    mainFunct(largestAreaNeighbor)
                 }
             })
         })
         //5. Previous and next buttons
-
     })
-
 }
 
 window.addEventListener("load", loadEvent);
