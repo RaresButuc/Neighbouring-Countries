@@ -13,9 +13,48 @@ const loadEvent = function () {
     const main = document.querySelector("#country");
     main.innerHTML = `Select a country from the list`
     let selectedCountry;
+
+    //**************************************** */
+    //Ex. 5
+    const nav = document.querySelector("#toolbar")
+    nav.insertAdjacentHTML("beforeend",
+        `<button id="prev" disabled>Previous country</button>
+        <button id="next" disabled>Next country</button>
+        `)
+    const prevBtn = document.querySelector("#prev");
+    const nextBtn = document.querySelector("#next");
+    let visitedCountries = [];
+    let currentIndex = visitedCountries.length;
+    //**************************** */
     options.addEventListener("change", function () {
         const selectedValue = this.value;
         const selectedCountry = countries.find(country => country.name.common === selectedValue);
+
+        //**************************************** */
+        //Ex. 5
+        // prevBtn.getElementsByClassName.display = "block"
+        nextBtn.getElementsByClassName.display = "block"
+        visitedCountries.push(selectedCountry.name.common)
+        console.log(visitedCountries)
+        console.log(++currentIndex)
+        if(currentIndex === 0){
+            prevBtn.removeAttribute('disabled')
+            prevBtn.setAttribute('enable')
+            // prevBtn.addEventListener('click', function(){
+            //     console.log("aasvf")
+                // main.innerHTML = `
+                //     <img src="${visitedCountries[currentIndex-1].flags.png}">
+                //     <h1>${visitedCountries[currentIndex-1].name.common}</h1>
+                //     <h2>${visitedCountries[currentIndex-1].region}</h2>
+                //     <h3>${visitedCountries[currentIndex-1].subregion}</h3>
+                //     <h4>${visitedCountries[currentIndex-1].capital}</h4>
+                // `;
+            // })
+        }
+       
+      
+        //**************************** */
+
 
         if (selectedCountry) {
             main.innerHTML = `
@@ -27,7 +66,6 @@ const loadEvent = function () {
             `;
 
         }
-
         //3.Largest population
 
         const populationBtn = document.querySelector("#population");
@@ -36,10 +74,11 @@ const loadEvent = function () {
 
             let largestPopulationNeighbor;
             let largestPopulation = 0;
-
+            if (!selectedCountry.borders) {
+                main.innerHTML = `<h2>This country has no neighbours.</h2>`
+            }
             selectedCountry.borders.forEach(borderCountry => {
                 const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
-
                 if (currentNeighbor.population > largestPopulation) {
                     largestPopulation = currentNeighbor.population;
                     largestPopulationNeighbor = currentNeighbor;
@@ -60,9 +99,11 @@ const loadEvent = function () {
 
             let largestAreaNeighbor;
             let largestArea = 0;
-            console.log(selectedCountry.area)
+            if (!selectedCountry.borders) {
+                main.innerHTML = `<h2>This country has no neighbours.</h2>`
+            }
             selectedCountry.borders.forEach(borderCountry => {
-                
+
                 const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
                 console.log(currentNeighbor)
                 if (currentNeighbor.area > largestArea) {
@@ -78,10 +119,10 @@ const loadEvent = function () {
                 }
             })
         })
-
         //5. Previous and next buttons
-        
+
     })
+
 }
 
 window.addEventListener("load", loadEvent);
