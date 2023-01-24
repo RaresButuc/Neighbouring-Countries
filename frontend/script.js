@@ -1,4 +1,3 @@
-
 const loadEvent = function () {
     //1. List the countries
     const options = document.querySelector("#all");
@@ -45,7 +44,7 @@ const loadEvent = function () {
                     largestPopulation = currentNeighbor.population;
                     largestPopulationNeighbor = currentNeighbor;
                     main.innerHTML = `
-        <img src="${selectedCountry.flags.png}"> </img>
+        <img src="${largestPopulationNeighbor.flags.png}"> </img>
         <h1>${largestPopulationNeighbor.name.common}</h1>
         <h2>${largestPopulationNeighbor.region}</h2>
         <h3>${largestPopulationNeighbor.subregion}</h3>
@@ -55,11 +54,34 @@ const loadEvent = function () {
             })
         })
 
+        //4. Largest area
+        const areaBtn = document.querySelector("#area");
+        areaBtn.addEventListener("click", function () {
+
+            let largestAreaNeighbor;
+            let largestArea = 0;
+            console.log(selectedCountry.area)
+            selectedCountry.borders.forEach(borderCountry => {
+                
+                const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
+                console.log(currentNeighbor)
+                if (currentNeighbor.area > largestArea) {
+                    largestArea = currentNeighbor.area;
+                    largestAreaNeighbor = currentNeighbor;
+                    main.innerHTML = `
+        <img src="${largestAreaNeighbor.flags.png}"> </img>
+        <h1>${largestAreaNeighbor.name.common}</h1>
+        <h2>${largestAreaNeighbor.region}</h2>
+        <h3>${largestAreaNeighbor.subregion}</h3>
+        <h4>${largestAreaNeighbor.capital}</h4>
+        <p> Area: ${largestAreaNeighbor.area}</p>`
+                }
+            })
+        })
+
+        //5. Previous and next buttons
+        
     })
-
-
 }
 
 window.addEventListener("load", loadEvent);
-
-
