@@ -1,4 +1,23 @@
 const loadEvent = function () {
+    let largestPopulationNeighbor;
+    let largestPopulation = 0;
+    let largestAreaNeighbor;
+    let largestArea = 0;
+
+    const largest = (element1, element2, element3, key) => {
+        if (!element1.borders) {
+            main.innerHTML = `<h2>This country has no neighbours.</h2>`
+        }
+        element1.borders.forEach(borderCountry => {
+            const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
+
+            if (currentNeighbor[key] > element2) {
+                element2 = currentNeighbor[key];
+                element3 = currentNeighbor;
+                mainFunct(element3)
+            }
+        })
+    }
     const mainFunct = (element) => {
         main.innerHTML = `
         <img src="${element.flags.png}">
@@ -10,6 +29,7 @@ const loadEvent = function () {
         <h4>Area: ${element.area}</h4>
     `;
     }
+
     //1. List the countries
     const options = document.querySelector("#all");
     const population = document.querySelector('#population')
@@ -23,7 +43,6 @@ const loadEvent = function () {
     //2. Details of the selected country
     const main = document.querySelector("#country");
     main.innerHTML = `Select a country from the list`
-    let selectedCountry;
 
     //**************************************** */
     //Ex. 5
@@ -37,76 +56,52 @@ const loadEvent = function () {
     const nextBtn = document.querySelector("#next");
     nextBtn.style.display = "none"
     let visitedCountries = [];
-    let currentIndex = visitedCountries.length -1;
+    let currentIndex = visitedCountries.length - 1;
     //**************************** */
     options.addEventListener("change", function () {
         const selectedValue = this.value;
         const selectedCountry = countries.find(country => country.name.common === selectedValue);
 
         //**************************************** */
-        //Ex. 5
+        //5. Previous and next buttons
         visitedCountries.push(selectedCountry)
         console.log(visitedCountries)
         ++currentIndex
-        if(currentIndex >= 1){
+        if (currentIndex >= 1) {
             prevBtn.style.display = "block"
-            prevBtn.addEventListener('click', function(){
-                mainFunct(visitedCountries[currentIndex-1])
+            prevBtn.addEventListener('click', function () {
+                mainFunct(visitedCountries[currentIndex - 1])
                 nextBtn.style.display = "block"
-                nextBtn.addEventListener('click', function(){
+                nextBtn.addEventListener('click', function () {
                     mainFunct(visitedCountries[currentIndex])
                 })
             })
         }
-        
         //**************************** */
 
-
         if (selectedCountry) {
-            mainFunct(selectedCountry)
+            mainFunct(selectedCountry) //Show details of the country
         }
-        //3.Largest population
 
         const populationBtn = document.querySelector("#population");
-
-        populationBtn.addEventListener("click", function () {
-
-            let largestPopulationNeighbor;
-            let largestPopulation = 0;
-            if (!selectedCountry.borders) {
-                main.innerHTML = `<h2>This country has no neighbours.</h2>`
-            }
-            selectedCountry.borders.forEach(borderCountry => {
-                const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
-                if (currentNeighbor.population > largestPopulation) {
-                    largestPopulation = currentNeighbor.population;
-                    largestPopulationNeighbor = currentNeighbor;
-                    mainFunct(largestPopulationNeighbor)
-                }
-            })
-        })
-
-        //4. Largest area
         const areaBtn = document.querySelector("#area");
-        areaBtn.addEventListener("click", function () {
+        //PopulationBtn and after AreaBtn
+         //3.Largest population
+        populationBtn.addEventListener("click", function () {
+            largest(selectedCountry, largestPopulation, largestPopulationNeighbor, "population")
 
-            let largestAreaNeighbor;
-            let largestArea = 0;
-            if (!selectedCountry.borders) {
-                main.innerHTML = `<h2>This country has no neighbours.</h2>`
-            }
-            selectedCountry.borders.forEach(borderCountry => {
-
-                const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
-                console.log(currentNeighbor)
-                if (currentNeighbor.area > largestArea) {
-                    largestArea = currentNeighbor.area;
-                    largestAreaNeighbor = currentNeighbor;
-                    mainFunct(largestAreaNeighbor)
-                }
+            //4. Largest area
+            areaBtn.addEventListener("click", function () {
+                largest(selectedCountry, largestArea, largestAreaNeighbor, "area")
             })
         })
-        //5. Previous and next buttons
+        //AreaBtn and after PopulationBtn
+        areaBtn.addEventListener("click", function () {
+            largest(selectedCountry, largestArea, largestAreaNeighbor, "area")
+            populationBtn.addEventListener("click", function () {
+                largest(selectedCountry, largestPopulation, largestPopulationNeighbor, "population")
+            })
+        })
     })
 }
 
