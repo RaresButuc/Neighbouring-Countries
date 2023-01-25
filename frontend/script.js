@@ -1,3 +1,32 @@
+let visitedCountries = [];
+let currentIndex = -1;
+let isLastClickPrevOrNext = false
+
+const mainFunct = (element, selectedElement) => {
+    selectedElement.innerHTML = `
+    <img src="${element.flags.png}">
+    <h1>Country name: ${element.name.common}</h1>
+    <h2>Region: ${element.region}</h2>
+    <h3>Subregion: ${element.subregion}</h3>
+    <h4>Capital: ${element.capital}</h4>
+    <h4>Population: ${element.population}</h4>
+    <h4>Area: ${element.area}</h4>
+`;
+}
+
+const processPrevBtn = (selectedElement) => {
+    console.log("PrevBtn")
+    currentIndex--
+    console.log(currentIndex)
+    console.log(visitedCountries[currentIndex])
+    mainFunct(visitedCountries[currentIndex], selectedElement)
+}
+const processNextBtn = (selectedElement) => {
+    console.log("NextBtn")
+    currentIndex++
+    mainFunct(visitedCountries[currentIndex], selectedElement)
+}
+
 const loadEvent = function () {
     let largestPopulationNeighbor;
     let largestPopulation = 0;
@@ -18,17 +47,7 @@ const loadEvent = function () {
             }
         })
     }
-    const mainFunct = (element) => {
-        main.innerHTML = `
-        <img src="${element.flags.png}">
-        <h1>Country name: ${element.name.common}</h1>
-        <h2>Region: ${element.region}</h2>
-        <h3>Subregion: ${element.subregion}</h3>
-        <h4>Capital: ${element.capital}</h4>
-        <h4>Population: ${element.population}</h4>
-        <h4>Area: ${element.area}</h4>
-    `;
-    }
+
 
     //1. List the countries
     const options = document.querySelector("#all");
@@ -55,38 +74,21 @@ const loadEvent = function () {
     prevBtn.style.display = "none"
     const nextBtn = document.querySelector("#next");
     nextBtn.style.display = "none"
-    let visitedCountries = [];
-    let currentIndex = visitedCountries.length - 1;
-    //**************************** */
+
+    //****************************************** */
     options.addEventListener("change", function () {
         const selectedValue = this.value;
-        const selectedCountry = countries.find(country => country.name.common === selectedValue);
-
-        //**************************************** */
-        //5. Previous and next buttons
-        visitedCountries.push(selectedCountry)
-        console.log(visitedCountries)
-        ++currentIndex
-        if (currentIndex >= 1) {
-            prevBtn.style.display = "block"
-            prevBtn.addEventListener('click', function () {
-                mainFunct(visitedCountries[currentIndex - 1])
-                nextBtn.style.display = "block"
-                nextBtn.addEventListener('click', function () {
-                    mainFunct(visitedCountries[currentIndex])
-                })
-            })
-        }
-        //**************************** */
+        let selectedCountry = countries.find(country => country.name.common === selectedValue);
 
         if (selectedCountry) {
-            mainFunct(selectedCountry) //Show details of the country
+            console.log(selectedCountry)
+            mainFunct(selectedCountry, main) //Show details of the country
         }
 
         const populationBtn = document.querySelector("#population");
         const areaBtn = document.querySelector("#area");
         //PopulationBtn and after AreaBtn
-         //3.Largest population
+        //3.Largest population
         populationBtn.addEventListener("click", function () {
             largest(selectedCountry, largestPopulation, largestPopulationNeighbor, "population")
 
@@ -102,7 +104,49 @@ const loadEvent = function () {
                 largest(selectedCountry, largestPopulation, largestPopulationNeighbor, "population")
             })
         })
+
+        //5. Previous and next buttons
+        if (isLastClickPrevOrNext) {
+            let tempVisitedCountries = JSON.parse(JSON.stringify(visitedCountries))
+            // console.log(visitedCountries)
+            for (let i = currentIndex + 1; i < visitedCountries.length; i++) {
+                tempVisitedCountries.splice(i, 1)
+            }
+            visitedCountries = tempVisitedCountries
+        }
+        visitedCountries.push(selectedCountry)
+        currentIndex = visitedCountries.length - 1;
+        isLastClickPrevOrNext = false;
+        console.log("visited",visitedCountries)
+        console.log("current", currentIndex)
+        prevBtn.style.display = "block"
+        if (visitedCountries.length > 1) {
+            nextBtn.style.display = "block"
+        }
     })
+    prevBtn.addEventListener('click', function(){
+        isLastClickPrevOrNext = true;
+        currentIndex--
+        console.log(currentIndex)
+        console.log(visitedCountries[currentIndex])
+        mainFunct(visitedCountries[currentIndex], main)
+        return
+    })
+    nextBtn.addEventListener('click', function () {
+        isLastClickPrevOrNext = true;
+        currentIndex++
+        mainFunct(visitedCountries[currentIndex], main)
+    })
+    //6. Translations
+    nav.insertAdjacentHTML("beforeend", `<select id=translations></select>`)
+    const optionsOfTranslations = document.querySelector("#translations")
+    optionsOfTranslations.insertAdjacentHTML("beforeend", `<option value="" selected="true" disabled>Select a language</option>`);
+    countries.forEach(country => {
+        //console.log(Object.keys(country.translations))
+        (Object.keys(country.translations)).forEach(language => {
+            options.insertAdjacentHTML("beforeend", `<option> ${language} </option>`);
+        });
+    });
 }
 
 window.addEventListener("load", loadEvent);
