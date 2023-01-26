@@ -27,26 +27,26 @@ const processNextBtn = (selectedElement) => {
     mainFunct(visitedCountries[currentIndex], selectedElement)
 }
 
+const largest = (element1, element2, element3, key, selectedElement) => {
+    if (!element1.borders) {
+        main.innerHTML = `<h2>This country has no neighbours.</h2>`
+    }
+    element1.borders.forEach(borderCountry => {
+        const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
+
+        if (currentNeighbor[key] > element2) {
+            element2 = currentNeighbor[key];
+            element3 = currentNeighbor;
+            mainFunct(element3, selectedElement)
+        }
+    })
+}
+
 const loadEvent = function () {
     let largestPopulationNeighbor;
     let largestPopulation = 0;
     let largestAreaNeighbor;
     let largestArea = 0;
-
-    const largest = (element1, element2, element3, key) => {
-        if (!element1.borders) {
-            main.innerHTML = `<h2>This country has no neighbours.</h2>`
-        }
-        element1.borders.forEach(borderCountry => {
-            const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
-
-            if (currentNeighbor[key] > element2) {
-                element2 = currentNeighbor[key];
-                element3 = currentNeighbor;
-                mainFunct(element3)
-            }
-        })
-    }
 
 
     //1. List the countries
@@ -90,11 +90,11 @@ const loadEvent = function () {
         //PopulationBtn and after AreaBtn
         //3.Largest population
         populationBtn.addEventListener("click", function () {
-            largest(selectedCountry, largestPopulation, largestPopulationNeighbor, "population")
+            largest(selectedCountry, largestPopulation, largestPopulationNeighbor, "population", main)
 
             //4. Largest area
             areaBtn.addEventListener("click", function () {
-                largest(selectedCountry, largestArea, largestAreaNeighbor, "area")
+                largest(selectedCountry, largestArea, largestAreaNeighbor, "area", main)
             })
         })
         //AreaBtn and after PopulationBtn
