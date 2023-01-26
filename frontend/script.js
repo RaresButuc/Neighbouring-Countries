@@ -13,7 +13,20 @@ const mainFunct = (element, selectedElement) => {
     <h4>Area: ${element.area}</h4>
 `;
 }
+// const processPrevBtn = (selectedElement) => {
+//     if (currentIndex > 0) {
+//         currentIndex--;
+//         mainFunc(visitedCountries[currentIndex], selectedElement);
+//     }
+// }
 
+// const processNextBtn = (selectedElement) => {
+//     if (currentIndex < visitedCountries.length - 1) {
+//         currentIndex++;
+//         mainFunc(visitedCountries[currentIndex], selectedElement);
+//     }
+// }
+//2nd version
 const processPrevBtn = (selectedElement) => {
     console.log("PrevBtn")
     currentIndex--
@@ -29,9 +42,9 @@ const processNextBtn = (selectedElement) => {
 
 const largest = (element1, element2, element3, key, selectedElement) => {
     if (!element1.borders) {
-        main.innerHTML = `<h2>This country has no neighbours.</h2>`
-    }
-    element1.borders.forEach(borderCountry => {
+        selectedElement.innerHTML = `<h2>This country has no neighbours.</h2>`
+    }else{
+        element1.borders.forEach(borderCountry => {
         const currentNeighbor = countries.find(country => country.cca3 === borderCountry);
 
         if (currentNeighbor[key] > element2) {
@@ -41,13 +54,14 @@ const largest = (element1, element2, element3, key, selectedElement) => {
         }
     })
 }
+return
+}
 
 const loadEvent = function () {
     let largestPopulationNeighbor;
     let largestPopulation = 0;
     let largestAreaNeighbor;
     let largestArea = 0;
-
 
     //1. List the countries
     const options = document.querySelector("#all");
@@ -99,7 +113,7 @@ const loadEvent = function () {
         })
         //AreaBtn and after PopulationBtn
         areaBtn.addEventListener("click", function () {
-            largest(selectedCountry, largestArea, largestAreaNeighbor, "area", main)
+            largest(selectedCountry, largestArea, largestAreaNeighbor, "area",main)
             populationBtn.addEventListener("click", function () {
                 largest(selectedCountry, largestPopulation, largestPopulationNeighbor, "population", main)
             })
