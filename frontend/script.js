@@ -99,9 +99,9 @@ const loadEvent = function () {
         })
         //AreaBtn and after PopulationBtn
         areaBtn.addEventListener("click", function () {
-            largest(selectedCountry, largestArea, largestAreaNeighbor, "area")
+            largest(selectedCountry, largestArea, largestAreaNeighbor, "area", main)
             populationBtn.addEventListener("click", function () {
-                largest(selectedCountry, largestPopulation, largestPopulationNeighbor, "population")
+                largest(selectedCountry, largestPopulation, largestPopulationNeighbor, "population", main)
             })
         })
 
