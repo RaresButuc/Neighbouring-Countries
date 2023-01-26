@@ -1,4 +1,4 @@
-const body = document.querySelector('body')
+
 
 let visitedCountries = [];
 let currentIndex = -1;
@@ -93,7 +93,8 @@ const loadEvent = function () {
 
     //2. Details of the selected country
     const main = document.querySelector("#country");
-    main.innerHTML = `Select a country from the list`
+    main.innerHTML = `<h2>Protect the world with
+    TrackAttack</h2>`
 
     //**************************************** */
     //Ex. 5
@@ -123,7 +124,7 @@ const loadEvent = function () {
         const selectedValue = this.value;
         selectedCountry = countries.find(country => country.name.common === selectedValue);
 
-        if (selectedCountry) {selectedCountry.name.common
+        if (selectedCountry) {
             //console.log(selectedCountry)
             main.innerHTML = `
     <img src="${selectedCountry.flags.png}">
@@ -211,7 +212,7 @@ const loadEvent = function () {
           <h3>Subregion: ${selectedCountry.subregion}</h3>
           <h4>Capital: ${selectedCountry.capital}</h4>
           <h4>Population: ${selectedCountry.population}</h4>
-          <h4>Area: ${selectedCountry.area}</h4>
+          <h4>Area: ${selectedCountry.area}  km²</h4>
           `
             }
         })
